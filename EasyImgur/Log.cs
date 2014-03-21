@@ -39,18 +39,21 @@ namespace EasyImgur
                     {
                         System.IO.File.WriteAllText(LogFile, string.Empty);
                     }
-                    catch (System.IO.FileNotFoundException ex)
-                    {
-                        Log.Error("Failed to save log file '" + LogFile + "': " + ex.Message);
-                    }
                     catch (System.Exception ex)
                     {
-                        Log.Error("Failed to save log file: " + ex.Message);
+                        // Can't exactly log it here, so we do nothing.
                     }
                 }
-                using (System.IO.StreamWriter w = System.IO.File.AppendText(LogFile))
+                try
                 {
-                    w.WriteLine(line);
+                    using (System.IO.StreamWriter w = System.IO.File.AppendText(LogFile))
+                    {
+                        w.WriteLine(line);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    // Do nothing.
                 }
                 Console.WriteLine(line);
             }

@@ -56,6 +56,8 @@
             this.buttonAuthorize = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxTimestamp = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.checkBoxTiedToAccount = new System.Windows.Forms.CheckBox();
             this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
@@ -83,8 +85,7 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
-            this.textBoxTimestamp = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.checkBoxShowContextOptions = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -103,7 +104,7 @@
             // checkBoxClearClipboard
             // 
             this.checkBoxClearClipboard.AutoSize = true;
-            this.checkBoxClearClipboard.Location = new System.Drawing.Point(71, 20);
+            this.checkBoxClearClipboard.Location = new System.Drawing.Point(78, 20);
             this.checkBoxClearClipboard.Name = "checkBoxClearClipboard";
             this.checkBoxClearClipboard.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxClearClipboard.Size = new System.Drawing.Size(192, 21);
@@ -135,6 +136,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.checkBoxShowContextOptions);
             this.tabPage1.Controls.Add(this.checkBoxShowTokenRefreshNotification);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.checkBoxLaunchAtBoot);
@@ -160,7 +162,7 @@
             // checkBoxShowTokenRefreshNotification
             // 
             this.checkBoxShowTokenRefreshNotification.AutoSize = true;
-            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(19, 186);
+            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(26, 186);
             this.checkBoxShowTokenRefreshNotification.Name = "checkBoxShowTokenRefreshNotification";
             this.checkBoxShowTokenRefreshNotification.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxShowTokenRefreshNotification.Size = new System.Drawing.Size(244, 21);
@@ -172,7 +174,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label4.Location = new System.Drawing.Point(269, 160);
+            this.label4.Location = new System.Drawing.Point(276, 160);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(408, 17);
             this.label4.TabIndex = 15;
@@ -181,7 +183,7 @@
             // checkBoxLaunchAtBoot
             // 
             this.checkBoxLaunchAtBoot.AutoSize = true;
-            this.checkBoxLaunchAtBoot.Location = new System.Drawing.Point(8, 159);
+            this.checkBoxLaunchAtBoot.Location = new System.Drawing.Point(15, 159);
             this.checkBoxLaunchAtBoot.Name = "checkBoxLaunchAtBoot";
             this.checkBoxLaunchAtBoot.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxLaunchAtBoot.Size = new System.Drawing.Size(255, 21);
@@ -203,7 +205,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label8.Location = new System.Drawing.Point(435, 77);
+            this.label8.Location = new System.Drawing.Point(442, 77);
             this.label8.Name = "label8";
             this.label8.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label8.Size = new System.Drawing.Size(159, 17);
@@ -213,7 +215,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(76, 77);
+            this.label7.Location = new System.Drawing.Point(83, 77);
             this.label7.Name = "label7";
             this.label7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label7.Size = new System.Drawing.Size(163, 17);
@@ -233,22 +235,22 @@
             "TIFF",
             "EMF",
             "WMF"});
-            this.comboBoxImageFormat.Location = new System.Drawing.Point(245, 74);
+            this.comboBoxImageFormat.Location = new System.Drawing.Point(252, 74);
             this.comboBoxImageFormat.Name = "comboBoxImageFormat";
-            this.comboBoxImageFormat.Size = new System.Drawing.Size(184, 24);
+            this.comboBoxImageFormat.Size = new System.Drawing.Size(177, 24);
             this.comboBoxImageFormat.TabIndex = 8;
             // 
             // textBoxDescriptionFormat
             // 
-            this.textBoxDescriptionFormat.Location = new System.Drawing.Point(245, 131);
+            this.textBoxDescriptionFormat.Location = new System.Drawing.Point(252, 131);
             this.textBoxDescriptionFormat.Name = "textBoxDescriptionFormat";
-            this.textBoxDescriptionFormat.Size = new System.Drawing.Size(377, 22);
+            this.textBoxDescriptionFormat.Size = new System.Drawing.Size(370, 22);
             this.textBoxDescriptionFormat.TabIndex = 7;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(63, 134);
+            this.label6.Location = new System.Drawing.Point(70, 134);
             this.label6.Name = "label6";
             this.label6.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label6.Size = new System.Drawing.Size(176, 17);
@@ -258,7 +260,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(110, 106);
+            this.label5.Location = new System.Drawing.Point(117, 106);
             this.label5.Name = "label5";
             this.label5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label5.Size = new System.Drawing.Size(129, 17);
@@ -267,15 +269,15 @@
             // 
             // textBoxTitleFormat
             // 
-            this.textBoxTitleFormat.Location = new System.Drawing.Point(245, 103);
+            this.textBoxTitleFormat.Location = new System.Drawing.Point(252, 103);
             this.textBoxTitleFormat.Name = "textBoxTitleFormat";
-            this.textBoxTitleFormat.Size = new System.Drawing.Size(377, 22);
+            this.textBoxTitleFormat.Size = new System.Drawing.Size(370, 22);
             this.textBoxTitleFormat.TabIndex = 4;
             // 
             // checkBoxCopyLinks
             // 
             this.checkBoxCopyLinks.AutoSize = true;
-            this.checkBoxCopyLinks.Location = new System.Drawing.Point(6, 47);
+            this.checkBoxCopyLinks.Location = new System.Drawing.Point(13, 47);
             this.checkBoxCopyLinks.Name = "checkBoxCopyLinks";
             this.checkBoxCopyLinks.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxCopyLinks.Size = new System.Drawing.Size(257, 21);
@@ -392,6 +394,23 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Info";
+            // 
+            // textBoxTimestamp
+            // 
+            this.textBoxTimestamp.Location = new System.Drawing.Point(101, 104);
+            this.textBoxTimestamp.Name = "textBoxTimestamp";
+            this.textBoxTimestamp.ReadOnly = true;
+            this.textBoxTimestamp.Size = new System.Drawing.Size(197, 22);
+            this.textBoxTimestamp.TabIndex = 18;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(18, 105);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(77, 17);
+            this.label9.TabIndex = 17;
+            this.label9.Text = "Timestamp";
             // 
             // buttonRemoveFromHistory
             // 
@@ -623,22 +642,16 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
-            // textBoxTimestamp
+            // checkBoxShowContextOptions
             // 
-            this.textBoxTimestamp.Location = new System.Drawing.Point(101, 104);
-            this.textBoxTimestamp.Name = "textBoxTimestamp";
-            this.textBoxTimestamp.ReadOnly = true;
-            this.textBoxTimestamp.Size = new System.Drawing.Size(197, 22);
-            this.textBoxTimestamp.TabIndex = 18;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 105);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(77, 17);
-            this.label9.TabIndex = 17;
-            this.label9.Text = "Timestamp";
+            this.checkBoxShowContextOptions.AutoSize = true;
+            this.checkBoxShowContextOptions.Location = new System.Drawing.Point(81, 213);
+            this.checkBoxShowContextOptions.Name = "checkBoxShowContextOptions";
+            this.checkBoxShowContextOptions.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxShowContextOptions.Size = new System.Drawing.Size(189, 21);
+            this.checkBoxShowContextOptions.TabIndex = 17;
+            this.checkBoxShowContextOptions.Text = "Show in file context menu";
+            this.checkBoxShowContextOptions.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -723,6 +736,7 @@
         private System.Windows.Forms.MenuItem exitTrayMenuItem;
         private System.Windows.Forms.TextBox textBoxTimestamp;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox checkBoxShowContextOptions;
     }
 }
 

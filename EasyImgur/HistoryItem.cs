@@ -5,7 +5,8 @@ using System.Text;
 
 namespace EasyImgur
 {
-    class HistoryItem
+    [System.Serializable]
+    public class HistoryItem
     {
         public string id;
         public string link;

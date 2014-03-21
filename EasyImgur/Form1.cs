@@ -16,7 +16,10 @@ namespace EasyImgur
         public Form1()
         {
             InitializeComponent();
-            
+        }
+
+        public void Initialize()
+        {
             Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
 
             this.notifyIcon1.ContextMenu = this.trayMenu;
@@ -27,13 +30,13 @@ namespace EasyImgur
             notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseDoubleClick);
             tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
 
-            ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
-            ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.RefreshedAPIAuthorization);
-            ImgurAPI.lostAuthorization += new ImgurAPI.AuthorizationEventHandler(this.LostAPIAuthorization);
-            ImgurAPI.networkRequestFailed += new ImgurAPI.NetworkEventHandler(this.APINetworkRequestFailed);
+            ImgurAPI.obtainedAuthorization += new ImgurAPIServer.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
+            ImgurAPI.refreshedAuthorization += new ImgurAPIServer.AuthorizationEventHandler(this.RefreshedAPIAuthorization);
+            ImgurAPI.lostAuthorization += new ImgurAPIServer.AuthorizationEventHandler(this.LostAPIAuthorization);
+            ImgurAPI.networkRequestFailed += new ImgurAPIServer.NetworkEventHandler(this.APINetworkRequestFailed);
 
-            History.historyItemAdded += new History.HistoryItemAddedEventHandler(this.HistoryItemAdded);
-            History.historyItemRemoved += new History.HistoryItemRemovedEventHandler(this.HistoryItemRemoved);
+            History.historyItemAdded += new HistoryServer.HistoryItemAddedEventHandler(this.HistoryItemAdded);
+            History.historyItemRemoved += new HistoryServer.HistoryItemRemovedEventHandler(this.HistoryItemRemoved);
             History.InitializeFromDisk();
 
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
@@ -43,14 +46,22 @@ namespace EasyImgur
             Statistics.GatherAndSend();
         }
 
-        private void HistoryItemAdded( HistoryItem _Item )
+        public void HistoryItemAdded( HistoryItem _Item )
         {
-            listBoxHistory.Items.Add(_Item);
+            Action addToListBox = delegate()
+            {
+                listBoxHistory.Items.Add(_Item);
+            };
+            listBoxHistory.BeginInvoke(addToListBox);
         }
 
-        private void HistoryItemRemoved( HistoryItem _Item )
+        public void HistoryItemRemoved(HistoryItem _Item)
         {
-            listBoxHistory.Items.Remove(_Item);
+            Action removeFromListBox = delegate()
+            {
+                listBoxHistory.Items.Remove(_Item);
+            };
+            listBoxHistory.BeginInvoke(removeFromListBox);
         }
 
         private void ApplicationExit( object sender, EventArgs e )
@@ -59,13 +70,13 @@ namespace EasyImgur
             notifyIcon1.Visible = false;
         }
 
-        private void ObtainedAPIAuthorization()
+        public void ObtainedAPIAuthorization()
         {
             SetAuthorizationStatusUI(true);
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has received authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
-        private void RefreshedAPIAuthorization()
+        public void RefreshedAPIAuthorization()
         {
             SetAuthorizationStatusUI(true);
             if (Properties.Settings.Default.showNotificationOnTokenRefresh)
@@ -84,13 +95,13 @@ namespace EasyImgur
             buttonForgetTokens.Enabled = _IsAuthorized;
         }
 
-        private void LostAPIAuthorization()
+        public void LostAPIAuthorization()
         {
             SetAuthorizationStatusUI(false);
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur no longer has authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
-        private void APINetworkRequestFailed()
+        public void APINetworkRequestFailed()
         {
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Network request failed. Check your internet connection.", ToolTipIcon.Error);
         }
@@ -291,6 +302,7 @@ namespace EasyImgur
             textBoxDescriptionFormat.Text = Properties.Settings.Default.descriptionFormat;
             comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
             checkBoxShowTokenRefreshNotification.Checked = Properties.Settings.Default.showNotificationOnTokenRefresh;
+            checkBoxShowContextOptions.Checked = Properties.Settings.Default.showContextOptions;
 
 
             // Check the registry for a key describing whether EasyImgur should be started on boot.
@@ -302,6 +314,18 @@ namespace EasyImgur
                 // A key exists, make sure we're using the most up-to-date path!
                 registryKey.SetValue("EasyImgur", Application.ExecutablePath);
                 notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
+            }
+
+
+            // Check whether there there are registry keys for EasyImgur's context menu.
+            Microsoft.Win32.RegistryKey regKeyShell = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("SystemFileAssociations\\image\\shell", true);
+            Microsoft.Win32.RegistryKey regKeyUploadAccount = regKeyShell.OpenSubKey("Upload to Imgur (to account)");
+            Microsoft.Win32.RegistryKey regKeyUploadAnon = regKeyShell.OpenSubKey("Upload to Imgur (anonymously)");
+
+            if (regKeyUploadAccount != null ||
+                regKeyUploadAnon != null)
+            {
+                checkBoxShowContextOptions.Checked = Properties.Settings.Default.showContextOptions = true;
             }
         }
 
@@ -327,6 +351,7 @@ namespace EasyImgur
             Properties.Settings.Default.descriptionFormat = textBoxDescriptionFormat.Text;
             Properties.Settings.Default.imageFormat = comboBoxImageFormat.SelectedIndex;
             Properties.Settings.Default.showNotificationOnTokenRefresh = checkBoxShowTokenRefreshNotification.Checked;
+            Properties.Settings.Default.showContextOptions = checkBoxShowContextOptions.Checked;
 
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (checkBoxLaunchAtBoot.Checked)
@@ -340,6 +365,36 @@ namespace EasyImgur
                 {
                     // Delete our value if one is present.
                     registryKey.DeleteValue("EasyImgur");
+                }
+                catch (ArgumentException ex)
+                {
+                    // Don't care at all.
+                }
+            }
+
+            if (checkBoxShowContextOptions.Checked)
+            {
+                string application_path = Application.ExecutablePath;
+
+                // If the checkbox was marked, we want to set a value in the registry so that
+                // EasyImgur upload options are available from the file context menu.
+                Microsoft.Win32.RegistryKey regKeyShell = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("SystemFileAssociations\\image\\shell", true);
+                Microsoft.Win32.RegistryKey regKeyUploadAccount = regKeyShell.CreateSubKey("Upload to Imgur (to account)");
+                Microsoft.Win32.RegistryKey regKeyUploadAnon = regKeyShell.CreateSubKey("Upload to Imgur (anonymously)");
+                Microsoft.Win32.RegistryKey regKeyUploadAccountCommand = regKeyUploadAccount.CreateSubKey("command");
+                Microsoft.Win32.RegistryKey regKeyUploadAnonCommand = regKeyUploadAnon.CreateSubKey("command");
+
+                regKeyUploadAccountCommand.SetValue("", application_path + " -U -acc \"%1\"");
+                regKeyUploadAnonCommand.SetValue("", application_path + " -U \"%1\"");
+            }
+            else
+            {
+                try
+                {
+                    // Delete our keys if present.
+                    Microsoft.Win32.RegistryKey registryKeyShell = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("SystemFileAssociations\\image\\shell", true);
+                    registryKeyShell.DeleteSubKey("Upload to Imgur (to account)");
+                    registryKeyShell.DeleteSubKey("Upload to Imgur (anonymously)");
                 }
                 catch (ArgumentException ex)
                 {
